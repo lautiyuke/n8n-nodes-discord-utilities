@@ -118,18 +118,13 @@ class DiscordRawTrigger {
 		},
 		inputs: [],
 		outputs: ['main'],
-		properties: [
+		credentials: [
 			{
-				displayName: 'Bot Token',
-				name: 'botToken',
-				type: 'string',
-				typeOptions: {
-					password: true,
-				},
-				default: '',
+				name: 'discordBotApi',
 				required: true,
-				description: 'Discord bot token used to connect to the gateway',
 			},
+		],
+		properties: [
 			{
 				displayName: 'Gateway Intents',
 				name: 'intents',
@@ -167,11 +162,16 @@ class DiscordRawTrigger {
 	};
 
 	async trigger() {
-		const botToken = this.getNodeParameter('botToken', 0);
+		const credentials = await this.getCredentials('discordBotApi');
+		const botToken = credentials.botToken;
 		const selectedIntents = this.getNodeParameter('intents', 0, []);
 		const eventNames = parseEventNames(this.getNodeParameter('eventNames', 0, ''));
 		const includeNonDispatch = this.getNodeParameter('includeNonDispatch', 0, false);
 		const emitLifecycleEvents = this.getNodeParameter('emitLifecycleEvents', 0, false);
+
+		if (!botToken) {
+			throw new Error('No se encontro el Bot Token en la credencial Discord Bot API.');
+		}
 
 		const allowedEventNames = new Set(eventNames);
 		const intentBits = resolveIntentBits(selectedIntents);

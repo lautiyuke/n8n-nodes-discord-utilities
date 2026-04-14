@@ -14,7 +14,7 @@ This is useful when you receive Discord interaction requests through a webhook a
 
 ### Discord Raw Trigger
 
-Connects to the Discord Gateway using a bot token and starts a workflow whenever Discord emits RAW gateway packets.
+Connects to the Discord Gateway using the official n8n Discord credential and starts a workflow whenever Discord emits RAW gateway packets.
 
 This is useful when you want to react to low-level Discord events such as `MESSAGE_CREATE`, `MESSAGE_UPDATE`, `GUILD_MEMBER_ADD`, or any other gateway dispatch event before or without relying on the higher-level abstractions of `discord.js`.
 
@@ -60,11 +60,11 @@ The node returns an item containing:
 
 ## Using Discord Raw Trigger
 
-The trigger opens a Discord gateway connection with your bot token and emits workflow items containing the RAW packet data received from Discord.
+The trigger opens a Discord gateway connection using an existing `Discord Bot API` credential from n8n and emits workflow items containing the RAW packet data received from Discord.
 
 ### Main Parameters
 
-- `Bot Token`: the Discord bot token used to log in to the gateway.
+- `Credential for Discord Bot API`: select the same official n8n credential used by the built-in Discord node. The trigger reads the `Bot Token` from there.
 - `Gateway Intents`: the gateway intents Discord should enable for this connection.
 - `Event Names`: optional comma-separated gateway event names such as `MESSAGE_CREATE, MESSAGE_UPDATE`.
 - `Include Non-Dispatch Packets`: emits packets without `t`, such as gateway acknowledgements.
@@ -95,7 +95,7 @@ A common use case in n8n is:
 
 - Discord signature validation requires the exact raw body sent by Discord.
 - If the body is modified before validation, the signature check will fail.
-- This package currently does not include credentials.
+- `Discord Raw Trigger` reuses n8n's built-in `Discord Bot API` credential instead of defining its own.
 
 ## Roadmap
 
