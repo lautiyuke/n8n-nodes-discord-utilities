@@ -6,6 +6,8 @@
     "n8n",
     "n8n-community-node-package",
     "discord",
+    "gateway",
+    "raw",
     "signature",
     "ed25519",
     "workflow",
@@ -42,7 +44,8 @@
     "n8nNodesApiVersion": 1,
     "credentials": [],
     "nodes": [
-      "nodes/DiscordSignatureValidator/DiscordSignatureValidator.node.js"
+      "nodes/DiscordSignatureValidator/DiscordSignatureValidator.node.js",
+      "nodes/DiscordRawTrigger/DiscordRawTrigger.node.js"
     ]
   }
 }

@@ -2,7 +2,7 @@
 
 Community nodes for [n8n](https://n8n.io/) focused on Discord-related utilities.
 
-This package currently includes one node and is designed to grow over time with more utilities for Discord integrations, automations, and webhook handling inside n8n.
+This package currently includes two nodes and is designed to grow over time with more utilities for Discord integrations, automations, and webhook handling inside n8n.
 
 ## Current Nodes
 
@@ -11,6 +11,12 @@ This package currently includes one node and is designed to grow over time with 
 Validates Discord request signatures using the ED25519 public key of your Discord application.
 
 This is useful when you receive Discord interaction requests through a webhook and need to verify that the request really comes from Discord before continuing your workflow.
+
+### Discord Raw Trigger
+
+Connects to the Discord Gateway using a bot token and starts a workflow whenever Discord emits RAW gateway packets.
+
+This is useful when you want to react to low-level Discord events such as `MESSAGE_CREATE`, `MESSAGE_UPDATE`, `GUILD_MEMBER_ADD`, or any other gateway dispatch event before or without relying on the higher-level abstractions of `discord.js`.
 
 ## Installation
 
@@ -51,6 +57,29 @@ The node returns an item containing:
 - `timestamp`: the received timestamp.
 - `messageSample`: a short sample of the raw body when validation succeeds.
 - `error`: an error message when parsing or validation fails unexpectedly.
+
+## Using Discord Raw Trigger
+
+The trigger opens a Discord gateway connection with your bot token and emits workflow items containing the RAW packet data received from Discord.
+
+### Main Parameters
+
+- `Bot Token`: the Discord bot token used to log in to the gateway.
+- `Gateway Intents`: the gateway intents Discord should enable for this connection.
+- `Event Names`: optional comma-separated gateway event names such as `MESSAGE_CREATE, MESSAGE_UPDATE`.
+- `Include Non-Dispatch Packets`: emits packets without `t`, such as gateway acknowledgements.
+- `Emit Client Lifecycle Events`: optionally emits `ready`, `warn`, `error`, and `invalidated` events as workflow items.
+
+### Output
+
+Each execution returns one item per gateway packet with fields like:
+
+- `source`: identifies whether the item came from the raw gateway stream or a client lifecycle event.
+- `receivedAt`: ISO timestamp of when the event was received.
+- `eventName`: the Discord gateway event name, such as `MESSAGE_CREATE`.
+- `opcode`: Discord gateway opcode.
+- `sequence`: packet sequence number when present.
+- `data`: raw event payload from Discord.
 
 ## Typical Workflow
 
