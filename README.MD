@@ -67,6 +67,10 @@ The trigger opens a Discord gateway connection using an existing `Discord Bot AP
 - `Credential for Discord Bot API`: select the same official n8n credential used by the built-in Discord node. The trigger reads the `Bot Token` from there.
 - `Gateway Intents`: the gateway intents Discord should enable for this connection.
 - `Event Names`: optional comma-separated gateway event names such as `MESSAGE_CREATE, MESSAGE_UPDATE`.
+- `Disable Self Message Notifications`: when enabled, skips message events where the author id matches the bot's own user id (useful to avoid reacting to messages sent by the bot itself).
+
+### More Options
+
 - `Include Non-Dispatch Packets`: emits packets without `t`, such as gateway acknowledgements.
 - `Emit Client Lifecycle Events`: optionally emits `ready`, `warn`, `error`, and `invalidated` events as workflow items.
 

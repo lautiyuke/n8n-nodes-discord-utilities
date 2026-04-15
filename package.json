@@ -1,50 +1,51 @@
 {
-  "name": "n8n-nodes-discord-utilities",
-  "version": "1.1.1",
-  "description": "n8n communities nodes to use with Discord integration",
-  "keywords": [
-    "n8n",
-    "n8n-community-node-package",
-    "discord",
-    "gateway",
-    "raw",
-    "signature",
-    "ed25519",
-    "workflow",
-    "custom",
-    "nodes",
-    "trigger"
-  ],
-  "author": "Lautaro Yukelson",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lautiyuke/n8n-nodes-discord-utilities.git"
-  },
-  "bugs": {
-    "url": "https://github.com/lautiyuke/n8n-nodes-discord-utilities/issues"
-  },
-  "homepage": "https://github.com/lautiyuke/n8n-nodes-discord-utilities#readme",
-  "dependencies": {
-    "discord.js": "^14.26.3",
-    "tweetnacl": "^1.0.3"
-  },
-  "files": [
-    "nodes"
-  ],
-  "scripts": {
-    "prepublishOnly": "echo Ready to publish",
-    "release:major": "npm version major && git push origin main --follow-tags",
-    "release:minor": "npm version minor && git push origin main --follow-tags",
-    "release:patch": "npm version patch && git push origin main --follow-tags",
-    "release:fix": "npm version patch && git push origin main --follow-tags"
-  },
-  "n8n": {
-    "n8nNodesApiVersion": 1,
-    "credentials": [],
-    "nodes": [
-      "nodes/DiscordSignatureValidator/DiscordSignatureValidator.node.js",
-      "nodes/DiscordRawTrigger/DiscordRawTrigger.node.js"
-    ]
-  }
+	"name": "n8n-nodes-discord-utilities",
+	"version": "1.1.1",
+	"description": "n8n communities nodes to use with Discord integration",
+	"keywords": [
+		"n8n",
+		"n8n-community-node-package",
+		"discord",
+		"gateway",
+		"raw",
+		"signature",
+		"ed25519",
+		"workflow",
+		"custom",
+		"nodes",
+		"trigger"
+	],
+	"author": "Lautaro Yukelson",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/lautiyuke/n8n-nodes-discord-utilities.git"
+	},
+	"bugs": {
+		"url": "https://github.com/lautiyuke/n8n-nodes-discord-utilities/issues"
+	},
+	"homepage": "https://github.com/lautiyuke/n8n-nodes-discord-utilities#readme",
+	"main": "index.js",
+	"dependencies": {
+		"discord.js": "14.26.3",
+		"tweetnacl": "1.0.3"
+	},
+	"files": [
+		"nodes"
+	],
+	"scripts": {
+		"prepublishOnly": "echo Ready to publish",
+		"release:major": "npm version major && git push origin main --follow-tags",
+		"release:minor": "npm version minor && git push origin main --follow-tags",
+		"release:patch": "npm version patch && git push origin main --follow-tags",
+		"release:fix": "npm version patch && git push origin main --follow-tags"
+	},
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"credentials": [],
+		"nodes": [
+			"nodes/DiscordSignatureValidator/DiscordSignatureValidator.node.js",
+			"nodes/DiscordRawTrigger/DiscordRawTrigger.node.js"
+		]
+	}
 }

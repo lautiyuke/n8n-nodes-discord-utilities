@@ -143,20 +143,37 @@ class DiscordRawTrigger {
 					'Optional comma-separated raw event names to emit. Leave empty to emit all dispatch events',
 			},
 			{
-				displayName: 'Include Non-Dispatch Packets',
-				name: 'includeNonDispatch',
+				displayName: 'Disable Self Message Notifications',
+				name: 'disableSelfMessageNotifications',
 				type: 'boolean',
 				default: false,
 				description:
-					'Whether to emit packets without an event name, such as heartbeat acknowledgements',
+					'Whether to skip events where the message author is the same bot user',
 			},
 			{
-				displayName: 'Emit Client Lifecycle Events',
-				name: 'emitLifecycleEvents',
-				type: 'boolean',
-				default: false,
-				description:
-					'Whether to emit `ready`, `invalidated`, `warn`, and `error` events as workflow items',
+				displayName: 'Más opciones',
+				name: 'moreOptions',
+				type: 'collection',
+				placeholder: 'Agregar opción',
+				default: {},
+				options: [
+					{
+						displayName: 'Include Non-Dispatch Packets',
+						name: 'includeNonDispatch',
+						type: 'boolean',
+						default: false,
+						description:
+							'Whether to emit packets without an event name, such as heartbeat acknowledgements',
+					},
+					{
+						displayName: 'Emit Client Lifecycle Events',
+						name: 'emitLifecycleEvents',
+						type: 'boolean',
+						default: false,
+						description:
+							'Whether to emit `ready`, `invalidated`, `warn`, and `error` events as workflow items',
+					},
+				],
 			},
 		],
 	};
@@ -166,8 +183,26 @@ class DiscordRawTrigger {
 		const botToken = credentials.botToken;
 		const selectedIntents = this.getNodeParameter('intents', 0, []);
 		const eventNames = parseEventNames(this.getNodeParameter('eventNames', 0, ''));
-		const includeNonDispatch = this.getNodeParameter('includeNonDispatch', 0, false);
-		const emitLifecycleEvents = this.getNodeParameter('emitLifecycleEvents', 0, false);
+		const disableSelfMessageNotifications = this.getNodeParameter(
+			'disableSelfMessageNotifications',
+			0,
+			false,
+		);
+		const moreOptions = this.getNodeParameter('moreOptions', 0, {});
+		let includeNonDispatch = Boolean(moreOptions.includeNonDispatch);
+		let emitLifecycleEvents = Boolean(moreOptions.emitLifecycleEvents);
+
+		if (typeof moreOptions.includeNonDispatch === 'undefined') {
+			try {
+				includeNonDispatch = this.getNodeParameter('includeNonDispatch', 0, false);
+			} catch (error) {}
+		}
+
+		if (typeof moreOptions.emitLifecycleEvents === 'undefined') {
+			try {
+				emitLifecycleEvents = this.getNodeParameter('emitLifecycleEvents', 0, false);
+			} catch (error) {}
+		}
 
 		if (!botToken) {
 			throw new Error('No se encontro el Bot Token en la credencial Discord Bot API.');
@@ -204,6 +239,21 @@ class DiscordRawTrigger {
 
 			if (allowedEventNames.size > 0 && !allowedEventNames.has(eventName)) {
 				return;
+			}
+
+			if (disableSelfMessageNotifications) {
+				const authorId =
+					packet &&
+					packet.d &&
+					packet.d.author &&
+					typeof packet.d.author.id !== 'undefined'
+						? String(packet.d.author.id)
+						: null;
+				const botUserId = client.user && typeof client.user.id !== 'undefined' ? String(client.user.id) : null;
+
+				if (authorId && botUserId && authorId === botUserId) {
+					return;
+				}
 			}
 
 			await emitItem({
